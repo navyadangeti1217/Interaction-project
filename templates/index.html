@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Doubt Sharing Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">📚 Student Doubt Sharing</h1>
+            <div class="nav-links">
+                <span>Welcome, {{ user }}!</span>
+                <a href="/post" class="btn btn-secondary">❓ Ask Question</a>
+                <a href="/logout" class="btn btn-danger">🚪 Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Recent Doubts</h2>
+        <div class="doubts-grid">
+            {% for d in doubts %}
+            <div class="card doubt-card">
+                <h3>{{ d[2] }}</h3>
+                <p class="meta">Asked by {{ d[1] }} on {{ d[3] }}</p>
+                <a href="/doubt/{{ d[0] }}" class="btn btn-primary">👀 View Answers</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% if not doubts %}
+        <p class="text-center">No doubts posted yet. Be the first to ask!</p>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

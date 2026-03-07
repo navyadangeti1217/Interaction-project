@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doubt Details - Doubt Sharing Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">📚 Student Doubt Sharing</h1>
+            <div class="nav-links">
+                <span>Welcome, {{ user }}!</span>
+                <a href="/" class="btn btn-secondary">🏠 Home</a>
+                <a href="/logout" class="btn btn-danger">🚪 Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2>🔍 Question</h2>
+            <h3>{{ doubt[2] }}</h3>
+            <p class="meta">Asked by {{ doubt[1] }} on {{ doubt[3] }}</p>
+        </div>
+
+        <h2>💬 Answers</h2>
+        <div class="answers-list">
+            {% for a in answers %}
+            <div class="card answer-card">
+                <p>{{ a[3] }}</p>
+                <small class="meta">Answered by {{ a[2] }} on {{ a[4] }}</small>
+            </div>
+            {% endfor %}
+        </div>
+        {% if not answers %}
+        <p class="text-center">No answers yet. Be the first to answer!</p>
+        {% endif %}
+
+        <div class="card">
+            <h3>✍️ Your Answer</h3>
+            <form action="/doubt/{{ doubt[0] }}" method="POST">
+                <div class="form-group">
+                    <label for="answer">Write your answer</label>
+                    <textarea id="answer" name="answer" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">📤 Post Answer</button>
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
