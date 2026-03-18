@@ -17,11 +17,9 @@ else:
 def get_db_connection():
     return sqlite3.connect(DB_PATH)
 
-# Initialize database on app startup
-init_db()
-
 # ---------------- DATABASE ----------------
 def init_db():
+    conn = get_db_connection()
     conn = get_db_connection()
     c = conn.cursor()
 
@@ -57,6 +55,9 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+# Initialize database on app startup
+init_db()
 
 # ---------------- REGISTER ----------------
 @app.route('/register', methods=['GET','POST'])
