@@ -6,6 +6,9 @@ import os
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
+# Initialize database on app startup
+init_db()
+
 # ---------------- DATABASE ----------------
 def init_db():
     conn = sqlite3.connect('doubts.db')
@@ -154,6 +157,5 @@ def view_doubt(doubt_id):
 
 # ---------------- RUN ----------------
 if __name__ == '__main__':
-    init_db()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
