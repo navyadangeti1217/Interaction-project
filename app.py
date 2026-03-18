@@ -6,12 +6,23 @@ import os
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
+# Use a writable database location for production (Render, etc.).
+# On Windows (local dev), we keep the database in the project folder.
+if os.name == 'nt':
+    DB_PATH = "doubts.db"
+else:
+    DB_PATH = os.environ.get("DB_PATH", "/tmp/doubts.db")
+
+
+def get_db_connection():
+    return sqlite3.connect(DB_PATH)
+
 # Initialize database on app startup
 init_db()
 
 # ---------------- DATABASE ----------------
 def init_db():
-    conn = sqlite3.connect('doubts.db')
+    conn = get_db_connection()
     c = conn.cursor()
 
     # Users table
@@ -54,7 +65,7 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        conn = sqlite3.connect('doubts.db')
+        conn = get_db_connection()
         c = conn.cursor()
         try:
             c.execute("INSERT INTO users(email,password) VALUES(?,?)",
@@ -74,7 +85,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        conn = sqlite3.connect('doubts.db')
+        conn = get_db_connection()
         c = conn.cursor()
         c.execute("SELECT * FROM users WHERE email=? AND password=?",
                   (email,password))
@@ -101,7 +112,7 @@ def home():
     if 'email' not in session:
         return redirect('/login')
 
-    conn = sqlite3.connect('doubts.db')
+    conn = get_db_connection()
     c = conn.cursor()
     c.execute("SELECT * FROM doubts ORDER BY created_at DESC")
     doubts = c.fetchall()
@@ -118,7 +129,7 @@ def post():
     if request.method == 'POST':
         question = request.form['question']
 
-        conn = sqlite3.connect('doubts.db')
+        conn = get_db_connection()
         c = conn.cursor()
         c.execute("INSERT INTO doubts(username,question) VALUES(?,?)",
                   (session['email'],question))
@@ -135,7 +146,7 @@ def view_doubt(doubt_id):
     if 'email' not in session:
         return redirect('/login')
 
-    conn = sqlite3.connect('doubts.db')
+    conn = get_db_connection()
     c = conn.cursor()
 
     if request.method == 'POST':
