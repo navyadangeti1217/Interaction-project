@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     showError(input, 'This field is required');
                 } else {
                     clearError(input);
+
                 }
             });
 
